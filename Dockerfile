@@ -3,7 +3,9 @@ FROM debian:jessie
 MAINTAINER hteen <i@hteen.cn>
 
 # phpize deps
+
 RUN apt-get update && apt-get install -y autoconf file g++ gcc libc-dev make pkg-config re2c ca-certificates curl libedit2 libsqlite3-0 libxml2 git libcurl4-gnutls-dev libcurl4-openssl-dev freetds-dev libbz2-dev libc-client-dev libenchant-dev libfreetype6-dev libgmp3-dev libicu-dev libjpeg62-turbo-dev libkrb5-dev libmcrypt-dev libmemcached-dev libpng12-dev libpq-dev libpspell-dev libsasl2-dev libsnmp-dev libssl-dev libtidy-dev libxml2-dev libxpm-dev libxslt1-dev zlib1g-dev libcurl4-openssl-dev libedit-dev libsqlite3-dev xz-utilso-install-recommends 
+
 
 ENV PHP_INI_DIR /etc/php
 ENV PHP_SCAN_INI_DIR /usr/local/etc/php
