@@ -3,25 +3,7 @@ FROM debian:jessie
 MAINTAINER hteen <i@hteen.cn>
 
 # phpize deps
-RUN apt-get update && apt-get install -y \
-        autoconf \
-        file \
-        g++ \
-        gcc \
-        libc-dev \
-        make \
-        pkg-config \
-        re2c \
-    --no-install-recommends && rm -r /var/lib/apt/lists/*
-
-# persistent / runtime deps
-RUN apt-get update && apt-get install -y \
-        ca-certificates \
-        curl \
-        libedit2 \
-        libsqlite3-0 \
-        libxml2 \
-    --no-install-recommends && rm -r /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y autoconf file g++ gcc libc-dev make pkg-config re2c ca-certificates curl libedit2 libsqlite3-0 libxml2 git libcurl4-gnutls-dev libcurl4-openssl-dev freetds-dev libbz2-dev libc-client-dev libenchant-dev libfreetype6-dev libgmp3-dev libicu-dev libjpeg62-turbo-dev libkrb5-dev libmcrypt-dev libmemcached-dev libpng12-dev libpq-dev libpspell-dev libsasl2-dev libsnmp-dev libssl-dev libtidy-dev libxml2-dev libxpm-dev libxslt1-dev zlib1g-dev libcurl4-openssl-dev libedit-dev libsqlite3-dev xz-utilso-install-recommends 
 
 ENV PHP_INI_DIR /etc/php
 ENV PHP_SCAN_INI_DIR /usr/local/etc/php
@@ -37,18 +19,7 @@ ENV PHP_VERSION 7.0.5
 ENV PHP_FILENAME php-7.0.5.tar.xz
 ENV PHP_SHA256 c41f1a03c24119c0dd9b741cdb67880486e64349fc33527767f6dc28d3803abb
 
-RUN set -xe \
-    && buildDeps=" \
-        $PHP_EXTRA_BUILD_DEPS \
-        libcurl4-openssl-dev \
-        libedit-dev \
-        libsqlite3-dev \
-        libssl-dev \
-        libxml2-dev \
-        xz-utils \
-    " \
-    && apt-get update && apt-get install -y $buildDeps --no-install-recommends && rm -rf /var/lib/apt/lists/* \
-    && curl -fSL "http://php.net/get/$PHP_FILENAME/from/this/mirror" -o "$PHP_FILENAME" \
+RUN curl -fSL "http://php.net/get/$PHP_FILENAME/from/this/mirror" -o "$PHP_FILENAME" \
     && echo "$PHP_SHA256 *$PHP_FILENAME" | sha256sum -c - \
     && curl -fSL "http://php.net/get/$PHP_FILENAME.asc/from/this/mirror" -o "$PHP_FILENAME.asc" \
     && export GNUPGHOME="$(mktemp -d)" \
@@ -77,8 +48,7 @@ RUN set -xe \
     && make -j"$(nproc)" \
     && make install \
     && { find /usr/local/bin /usr/local/sbin -type f -executable -exec strip --strip-all '{}' + || true; } \
-    && make clean \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps
+    && make clean
 
 COPY docker-php-ext-* /usr/local/bin/
 
@@ -121,37 +91,11 @@ RUN set -ex \
     } | tee php-fpm.d/zz-docker.conf
 
 # Install modules
-RUN apt-get update && apt-get install -y \
-        git \
-        curl \
-        libcurl4-gnutls-dev \
-        freetds-dev \
-        libbz2-dev \
-        libc-client-dev \
-        libenchant-dev \
-        libfreetype6-dev \
-        libgmp3-dev \
-        libicu-dev \
-        libjpeg62-turbo-dev \
-        libkrb5-dev \
-        libmcrypt-dev \
-        libmemcached-dev \
-        libpng12-dev \
-        libpq-dev \
-        libpspell-dev \
-        libsasl2-dev \
-        libsnmp-dev \
-        libssl-dev \
-        libtidy-dev \
-        libxml2-dev \
-        libxpm-dev \
-        libxslt1-dev \
-        zlib1g-dev \
-    && docker-php-ext-install iconv zip curl bcmath bz2 calendar dba enchant exif ftp gd gettext intl mbstring mcrypt mysqli opcache pcntl pdo pdo_mysql pdo_pgsql pgsql pspell shmop snmp soap sockets sysvmsg sysvsem sysvshm tidy wddx xmlrpc xsl  \
+RUN docker-php-ext-install iconv zip curl bcmath bz2 calendar dba enchant exif ftp gd gettext intl mbstring mcrypt mysqli opcache pcntl pdo pdo_mysql pdo_pgsql pgsql pspell shmop snmp soap sockets sysvmsg sysvsem sysvshm tidy wddx xmlrpc xsl  \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
 
-RUN apt-get clean
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN git clone -b php7 https://github.com/laruence/yaf.git /usr/src/php/ext/yaf/
 RUN docker-php-ext-install yaf
