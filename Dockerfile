@@ -29,11 +29,14 @@ RUN apt-get update && apt-get install -y \
         libxpm-dev \
         libxslt1-dev \
         zlib1g-dev \
-    && docker-php-ext-install iconv zip curl bcmath bz2 calendar dba enchant exif ftp gd gettext intl mbstring mcrypt mysqli opcache pcntl pdo pdo_mysql pdo_pgsql pgsql pspell shmop snmp soap sockets sysvmsg sysvsem sysvshm tidy wddx xmlrpc xsl  \
+    && docker-php-ext-install iconv zip curl bcmath bz2 calendar dba enchant exif ftp gettext intl mbstring mcrypt mysqli opcache pcntl pdo pdo_mysql pdo_pgsql pgsql pspell shmop snmp soap sockets sysvmsg sysvsem sysvshm tidy wddx xmlrpc xsl  \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
 
 RUN apt-get clean
+
+
+ENV INI_DIR /etc/php
 
 RUN git clone -b php7 https://github.com/laruence/yaf.git /usr/src/php/ext/yaf/
 RUN docker-php-ext-install yaf
@@ -47,6 +50,6 @@ RUN docker-php-ext-install yaconf
 RUN git clone -b php7 https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/
 RUN docker-php-ext-install redis
 
-ADD https://github.com/hteen/docker-php/blob/develop/php.ini /usr/local/etc/php/php.ini
+COPY ${INI_DIR}/php.ini ${PHP_INI_DIR}/php.ini
 
 CMD ["php-fpm"]
