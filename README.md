@@ -1,4 +1,4 @@
-# docker-php7
+# Docker php7
 docker php-fpm images
 
 # Add PHP Extension
@@ -7,6 +7,5 @@ iconv zip curl bcmath bz2 calendar dba enchant exif ftp gettext intl mbstring mc
 # Usage
 ```yaml
 volumes:
-  - www_dir:/data/www
   - ini_dir:/etc/php
 ```
