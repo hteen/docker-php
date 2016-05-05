@@ -35,6 +35,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt-get clean
 
+COPY php.ini /etc/php/php.ini
 
 ENV INI_DIR /etc/php
 
