@@ -6,6 +6,7 @@ MAINTAINER hteen <i@hteen.cn>
 RUN apt-get update && apt-get install -y \
         git \
         curl \
+        snmp-mibs-downloader \
         libcurl4-gnutls-dev \
         freetds-dev \
         libbz2-dev \
