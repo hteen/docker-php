@@ -35,9 +35,6 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt-get clean
 
-
-ENV INI_DIR /etc/php
-
 RUN git clone -b php7 https://github.com/laruence/yaf.git /usr/src/php/ext/yaf/
 RUN docker-php-ext-install yaf
 
@@ -49,7 +46,5 @@ RUN docker-php-ext-install yaconf
 
 RUN git clone -b php7 https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/
 RUN docker-php-ext-install redis
-
-COPY ${INI_DIR}/php.ini ${PHP_INI_DIR}/php.ini
 
 CMD ["php-fpm"]
