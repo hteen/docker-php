@@ -5,7 +5,7 @@ MAINTAINER hteen <i@hteen.cn>
 # Install modules
 RUN apt-get update && apt-get install -y \
         git \
-        curl \
+        libcurl4-openssl-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
