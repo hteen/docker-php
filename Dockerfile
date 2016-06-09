@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd
 
+RUN docker-php-ext-install pdo_mysql mysqli mbstring opcache
+
 RUN apt-get clean
 
 RUN git clone -b php7 https://github.com/laruence/yaf.git /usr/src/php/ext/yaf/
