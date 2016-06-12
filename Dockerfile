@@ -14,20 +14,23 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd
 
-RUN docker-php-ext-install pdo_mysql mysqli mbstring opcache
+RUN docker-php-ext-install -j$(nproc) pdo_mysql mysqli mbstring opcache
 
 RUN apt-get clean
 
 RUN git clone -b php7 https://github.com/laruence/yaf.git /usr/src/php/ext/yaf/
-RUN docker-php-ext-install yaf
 
 RUN git clone -b php7 https://github.com/laruence/yar.git /usr/src/php/ext/yar/
-RUN docker-php-ext-install yar
 
 RUN git clone https://github.com/laruence/yaconf.git /usr/src/php/ext/yaconf/
-RUN docker-php-ext-install yaconf
 
 RUN git clone -b php7 https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/
-RUN docker-php-ext-install redis
+
+ADD https://github.com/swoole/swoole-src/archive/swoole-1.8.5-stable.tar.gz ./
+RUN tar zxf swoole-1.8.5-stable.tar.gz && \
+    mv swoole-src-swoole-1.8.5-stable /usr/src/php/ext/swoole && \
+    rm -rf swoole-1.8.5-stable.tar.gz
+    
+RUN docker-php-ext-install -j$(nproc) yaf yar yaconf redis swoole
 
 CMD ["php-fpm"]
