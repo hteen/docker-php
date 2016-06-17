@@ -29,7 +29,7 @@ RUN git clone -b php7 https://github.com/phpredis/phpredis.git /usr/src/php/ext/
 ADD https://github.com/swoole/swoole-src/archive/1.8.6-stable.tar.gz ./
 RUN tar zxf swoole-src-1.8.6-stable.tar.gz && \
     mv swoole-src-1.8.6-stable /usr/src/php/ext/swoole && \
-    rm -rf 1.8.6-stable.tar.gz
+    rm -rf swoole-src-1.8.6-stable.tar.gz
 
 RUN docker-php-ext-install -j$(nproc) yaf yar yaconf redis swoole
 
