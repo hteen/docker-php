@@ -27,10 +27,10 @@ RUN git clone https://github.com/laruence/yaconf.git /usr/src/php/ext/yaconf/
 RUN git clone -b php7 https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/
 
 ENV SWOOLE_VERSION swoole-1.8.6
-ADD https://github.com/swoole/swoole-src/archive/${SWOOLE_VERSION}-stable.tar.gz ./
-RUN tar zxf ${SWOOLE_VERSION}-stable.tar.gz && \
-    mv swoole-src-${SWOOLE_VERSION}-stable /usr/src/php/ext/swoole && \
-    rm -rf ${SWOOLE_VERSION}-stable.tar.gz
+ADD https://github.com/swoole/swoole-src/archive/$SWOOLE_VERSION-stable.tar.gz ./
+RUN tar zxf $SWOOLE_VERSION-stable.tar.gz && \
+    mv swoole-src-$SWOOLE_VERSION-stable /usr/src/php/ext/swoole && \
+    rm -rf $SWOOLE_VERSION-stable.tar.gz
 
 RUN docker-php-ext-install -j$(nproc) yaf yar yaconf redis swoole
 
