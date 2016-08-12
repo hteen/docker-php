@@ -15,9 +15,9 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install -j$(nproc) gd \
     && apt-get clean
 
-RUN git clone -b php7 https://github.com/laruence/yaf.git /usr/src/php/ext/yaf/
+RUN git clone https://github.com/laruence/yaf.git /usr/src/php/ext/yaf/
 
-RUN git clone -b php7 https://github.com/laruence/yar.git /usr/src/php/ext/yar/
+RUN git clone https://github.com/laruence/yar.git /usr/src/php/ext/yar/
 
 RUN git clone https://github.com/laruence/yaconf.git /usr/src/php/ext/yaconf/
 
