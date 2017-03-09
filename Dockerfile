@@ -26,4 +26,4 @@ RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com
     
-RUN docker-php-ext-install -j$(nproc) pdo_mysql mysqli mbstring opcache yaf yar yaconf redis swoole
+RUN docker-php-ext-install -j$(nproc) pdo_mysql mysqli mbstring opcache zip yaf yar yaconf redis swoole

@@ -2,7 +2,7 @@
 
 * enable php extension 
 
-> iconv mcrypt gd pdo_mysql mysqli mbstring opcache
+> iconv mcrypt gd pdo_mysql mysqli mbstring opcache zip
 
 * Install php extension
 
