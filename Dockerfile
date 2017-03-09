@@ -20,5 +20,9 @@ RUN git clone https://github.com/laruence/yar.git /usr/src/php/ext/yar/
 RUN git clone https://github.com/laruence/yaconf.git /usr/src/php/ext/yaconf/
 RUN git clone -b php7 https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/
 RUN git clone https://github.com/swoole/swoole-src.git /usr/src/php/ext/swoole/
+
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
+RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com
     
 RUN docker-php-ext-install -j$(nproc) pdo_mysql mysqli mbstring opcache yaf yar yaconf redis swoole

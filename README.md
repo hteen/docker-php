@@ -1,5 +1,12 @@
-# Docker php7
-docker php-fpm image
+# PHP docker image
 
-# Add php extension
-iconv mcrypt gd pdo_mysql mysqli mbstring opcache yaf yar yaconf redis swoole
+* enable php extension 
+
+> iconv mcrypt gd pdo_mysql mysqli mbstring opcache
+
+* Install php extension
+
+> yaf yar yaconf redis swoole
+
+* Install php composer
+
