@@ -25,5 +25,7 @@ RUN git clone https://github.com/swoole/swoole-src.git /usr/src/php/ext/swoole/
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com
+
+COPY php.ini /usr/local/etc/php/php.ini
     
 RUN docker-php-ext-install -j$(nproc) pdo_mysql mysqli mbstring opcache zip yaf yar yaconf redis swoole
