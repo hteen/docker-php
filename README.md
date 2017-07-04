@@ -1,12 +1,11 @@
 # PHP docker image
 
-* enable php extension 
+* enable php extension
 
 > iconv mcrypt gd pdo_mysql mysqli mbstring opcache zip
 
 * Install php extension
 
-> yaf yar yaconf redis swoole
+> yaf yar yaconf redis swoole msgpack
 
 * Install php composer
-

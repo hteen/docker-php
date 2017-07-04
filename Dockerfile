@@ -1,4 +1,4 @@
-FROM php:7.1.2-fpm
+FROM php:7.1.6-fpm
 
 MAINTAINER hteen <i@hteen.cn>
 
@@ -21,11 +21,12 @@ RUN git clone https://github.com/laruence/yar.git /usr/src/php/ext/yar/
 RUN git clone https://github.com/laruence/yaconf.git /usr/src/php/ext/yaconf/
 RUN git clone -b php7 https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/
 RUN git clone https://github.com/swoole/swoole-src.git /usr/src/php/ext/swoole/
+RUN git clone https://github.com/msgpack/msgpack-php.git /usr/src/php/ext/msgpack/
 
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com
 
 COPY php.ini /usr/local/etc/php/php.ini
-    
-RUN docker-php-ext-install -j$(nproc) pdo_mysql mysqli mbstring opcache zip yaf yar yaconf redis swoole
+
+RUN docker-php-ext-install -j$(nproc) pdo_mysql mysqli opcache zip yaf yar yaconf redis swoole msgpack
