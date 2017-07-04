@@ -29,4 +29,4 @@ RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com
 
 COPY php.ini /usr/local/etc/php/php.ini
 
-RUN docker-php-ext-install -j$(nproc) pdo_mysql mysqli mbstring opcache zip yaf yar yaconf redis swoole msgpack
+RUN docker-php-ext-install -j$(nproc) pdo_mysql mysqli opcache zip yaf yar yaconf redis swoole msgpack
