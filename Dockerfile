@@ -31,4 +31,4 @@ COPY php.ini /usr/local/etc/php/php.ini
 
 RUN docker-php-ext-install -j$(nproc) pdo_mysql mysqli opcache zip yaf yaconf redis swoole msgpack \
     && docker-php-ext-configure yar --enable-msgpack \
-    && docker-php-ext-install -j$(nproc) yar
+    && docker-php-ext-install -j$(nproc) yar pcntl
