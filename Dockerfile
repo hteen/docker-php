@@ -18,9 +18,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN git clone https://github.com/laruence/yaf.git /usr/src/php/ext/yaf/
 RUN git clone https://github.com/laruence/yar.git /usr/src/php/ext/yar/
-RUN git clone https://github.com/laruence/yaconf.git /usr/src/php/ext/yaconf/
 RUN git clone https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/
-RUN git clone https://github.com/swoole/swoole-src.git /usr/src/php/ext/swoole/
 RUN git clone https://github.com/msgpack/msgpack-php.git /usr/src/php/ext/msgpack/
 
 RUN curl -sS https://getcomposer.org/installer | php
@@ -29,6 +27,6 @@ RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com
 
 COPY php.ini /usr/local/etc/php/php.ini
 
-RUN docker-php-ext-install -j$(nproc) pdo_mysql mysqli opcache zip yaf yaconf redis swoole msgpack \
+RUN docker-php-ext-install -j$(nproc) pdo_mysql mysqli opcache zip yaf redis msgpack \
     && docker-php-ext-configure yar --enable-msgpack \
     && docker-php-ext-install -j$(nproc) yar
