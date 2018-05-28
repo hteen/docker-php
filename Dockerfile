@@ -1,6 +1,6 @@
 FROM php:7.0.27-fpm
 
-MAINTAINER hteen <i@hteen.cn>
+LABEL maintainer="i@hteen.cn"
 
 # Install modules
 RUN apt-get update && apt-get install -y \
@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y \
 RUN git clone https://github.com/laruence/yaf.git /usr/src/php/ext/yaf/
 RUN git clone https://github.com/laruence/yar.git /usr/src/php/ext/yar/
 RUN git clone https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/
-RUN git clone https://github.com/swoole/swoole-src.git /usr/src/php/ext/swoole/
+RUN git clone -b v2.2.0 https://github.com/swoole/swoole-src.git /usr/src/php/ext/swoole/
 RUN git clone https://github.com/msgpack/msgpack-php.git /usr/src/php/ext/msgpack/
 RUN git clone https://github.com/xdebug/xdebug.git /usr/src/php/ext/xdebug/
 
@@ -31,4 +31,5 @@ COPY php.ini /usr/local/etc/php/php.ini
 
 RUN docker-php-ext-install -j$(nproc) pdo_mysql mysqli opcache zip yaf redis swoole msgpack \
     && docker-php-ext-configure yar --enable-msgpack \
+    && docker-php-ext-configure xdebug --enable-xdebug \
     && docker-php-ext-install -j$(nproc) yar xdebug
