@@ -21,6 +21,7 @@ RUN git clone https://github.com/laruence/yar.git /usr/src/php/ext/yar/
 RUN git clone https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/
 RUN git clone https://github.com/swoole/swoole-src.git /usr/src/php/ext/swoole/
 RUN git clone https://github.com/msgpack/msgpack-php.git /usr/src/php/ext/msgpack/
+RUN git clone https://github.com/xdebug/xdebug.git /usr/src/php/ext/xdebug/
 
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
@@ -30,4 +31,5 @@ COPY php.ini /usr/local/etc/php/php.ini
 
 RUN docker-php-ext-install -j$(nproc) pdo_mysql mysqli opcache zip yaf redis swoole msgpack \
     && docker-php-ext-configure yar --enable-msgpack \
-    && docker-php-ext-install -j$(nproc) yar
+    && docker-php-ext-configure --enable-xdebug \
+    && docker-php-ext-install -j$(nproc) yar xdebug
