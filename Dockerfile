@@ -1,6 +1,6 @@
-FROM php:7.1.14-fpm
+FROM php:7.2.7-fpm
 
-MAINTAINER hteen <i@hteen.cn>
+LABEL maintainer="i@hteen.cn"
 
 # Install modules
 RUN apt-get update && apt-get install -y \
@@ -10,9 +10,10 @@ RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
-        libpng12-dev \
         --no-install-recommends && rm -r /var/lib/apt/lists/* \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt \
+    && pecl install mcrypt-1.0.1 \
+    && docker-php-ext-enable mcrypt \
+    && docker-php-ext-install -j$(nproc) iconv \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd
 
