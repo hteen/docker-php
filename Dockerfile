@@ -1,4 +1,4 @@
-FROM php:7.2.7-fpm
+FROM php:7.2.8-fpm
 
 LABEL maintainer="i@hteen.cn"
 
@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
+        libpcre3 \
+        libpcre3-dev \
         --no-install-recommends && rm -r /var/lib/apt/lists/* \
     && pecl install mcrypt-1.0.1 \
     && docker-php-ext-enable mcrypt \
