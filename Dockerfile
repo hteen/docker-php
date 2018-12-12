@@ -1,4 +1,4 @@
-FROM php:7.2.8-fpm
+FROM php:7.2.13-fpm
 
 LABEL maintainer="i@hteen.cn"
 
@@ -28,7 +28,7 @@ RUN git clone https://github.com/msgpack/msgpack-php.git /usr/src/php/ext/msgpac
 
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
-RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com
+RUN composer config -g repo.packagist composer https://packagist.laravel-china.org
 
 COPY php.ini /usr/local/etc/php/php.ini
 
