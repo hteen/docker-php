@@ -2,6 +2,8 @@ FROM php:7.3.6-fpm
 
 LABEL maintainer="i@hteen.cn"
 
+ENV COMPOSER_MIRRORS https://mirrors.aliyun.com/composer/
+
 # Install modules
 RUN apt-get update && apt-get install -y \
         git \
@@ -23,16 +25,16 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd
 
-RUN git clone https://github.com/laruence/yaf.git /usr/src/php/ext/yaf/
-RUN git clone https://github.com/laruence/yar.git /usr/src/php/ext/yar/
-RUN git clone https://github.com/laruence/yaconf.git /usr/src/php/ext/yaconf/
-RUN git clone https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/
-RUN git clone https://github.com/swoole/swoole-src.git /usr/src/php/ext/swoole/
-RUN git clone https://github.com/msgpack/msgpack-php.git /usr/src/php/ext/msgpack/
+RUN git clone https://github.com/laruence/yaf.git /usr/src/php/ext/yaf/ \
+    && git clone https://github.com/laruence/yar.git /usr/src/php/ext/yar/ \
+    && git clone https://github.com/laruence/yaconf.git /usr/src/php/ext/yaconf/ \
+    && git clone https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/ \
+    && git clone https://github.com/swoole/swoole-src.git /usr/src/php/ext/swoole/ \
+    && git clone https://github.com/msgpack/msgpack-php.git /usr/src/php/ext/msgpack/
 
-RUN curl -sS https://getcomposer.org/installer | php
-RUN mv composer.phar /usr/local/bin/composer
-RUN composer config -g repo.packagist composer https://packagist.laravel-china.org
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer \
+    && composer config -g repo.packagist composer ${COMPOSER_MIRRORS}
 
 COPY php.ini /usr/local/etc/php/php.ini
 
