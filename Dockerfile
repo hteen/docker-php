@@ -1,4 +1,4 @@
-FROM php:7.3.6-fpm
+FROM php:7.3.9-fpm
 
 LABEL maintainer="i@hteen.cn"
 
@@ -19,18 +19,18 @@ RUN apt-get update && apt-get install -y \
         libpcre3 \
         libpcre3-dev \
         --no-install-recommends && rm -r /var/lib/apt/lists/* \
-    && pecl install mcrypt-1.0.2 memcached \
+    && pecl install mcrypt-1.0.3 memcached \
     && docker-php-ext-enable mcrypt memcached \
     && docker-php-ext-install -j$(nproc) iconv gmp \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd
 
-RUN git clone https://github.com/laruence/yaf.git /usr/src/php/ext/yaf/ \
-    && git clone https://github.com/laruence/yar.git /usr/src/php/ext/yar/ \
-    && git clone https://github.com/laruence/yaconf.git /usr/src/php/ext/yaconf/ \
-    && git clone https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/ \
-    && git clone https://github.com/swoole/swoole-src.git /usr/src/php/ext/swoole/ \
-    && git clone https://github.com/msgpack/msgpack-php.git /usr/src/php/ext/msgpack/
+RUN git clone --depth=1 https://github.com/laruence/yaf.git /usr/src/php/ext/yaf/ \
+    && git clone --depth=1 https://github.com/laruence/yar.git /usr/src/php/ext/yar/ \
+    && git clone --depth=1 https://github.com/laruence/yaconf.git /usr/src/php/ext/yaconf/ \
+    && git clone --depth=1 https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/ \
+    && git clone --depth=1 -b v4.4.8 https://github.com/swoole/swoole-src.git /usr/src/php/ext/swoole/ \
+    && git clone --depth=1 https://github.com/msgpack/msgpack-php.git /usr/src/php/ext/msgpack/
 
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \

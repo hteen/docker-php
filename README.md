@@ -1,8 +1,8 @@
 # PHP docker image
 
 ## Installed php composer
-composer use laravel-china image
-> composer config -g repo.packagist composer https://packagist.laravel-china.org
+composer use aliyun image
+> composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
 ## Installed extensions
 
@@ -23,10 +23,10 @@ composer use laravel-china image
 * libxml
 * mbstring
 * mcrypt
+* memcached
 * msgpack
 * mysqli
 * mysqlnd
-* memcached
 * openssl
 * pcntl
 * pcre
