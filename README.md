@@ -49,7 +49,6 @@ composer use aliyun image
 * xml
 * xmlreader
 * xmlwriter
-* yaconf
 * yaf
 * yar
 * Zend OPcache
