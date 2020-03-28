@@ -1,4 +1,4 @@
-FROM php:7.4.4-fpm
+FROM php:7.3.16-fpm
 
 LABEL maintainer="i@hteen.cn"
 
@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y \
     && pecl install mcrypt-1.0.3 memcached \
     && docker-php-ext-enable mcrypt memcached \
     && docker-php-ext-install -j$(nproc) iconv gmp \
-    && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd
 
 RUN git clone --depth=1 https://github.com/laruence/yaf.git /usr/src/php/ext/yaf/ \
