@@ -1,4 +1,4 @@
-FROM php:7.3.16-fpm
+FROM php:7.3.21-fpm
 
 LABEL maintainer="i@hteen.cn"
 
@@ -40,3 +40,20 @@ RUN curl -sS https://getcomposer.org/installer | php \
 RUN docker-php-ext-install -j$(nproc) bcmath pdo_mysql mysqli opcache zip yaf redis swoole msgpack \
     && docker-php-ext-configure yar --enable-msgpack \
     && docker-php-ext-install -j$(nproc) yar pcntl
+
+# 修改默认配置
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+RUN set -eux; \
+    { \
+        echo 'post_max_size = 200M'; \
+        echo 'upload_max_filesize = 200M'; \
+        echo 'max_file_uploads = 200'; \
+        echo 'memory_limit = 512M'; \
+    } | tee -a $PHP_INI_DIR/php.ini; \
+    { \
+        echo 'pm.max_children = 512'; \
+        echo 'pm.start_servers = 20'; \
+        echo 'pm.min_spare_servers = 10'; \
+        echo 'pm.max_spare_servers = 40'; \
+        echo 'pm.max_requests = 1000'; \
+    } | tee -a /usr/local/etc/php-fpm.d/www.conf
