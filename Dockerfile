@@ -1,8 +1,11 @@
-FROM php:7.3.21-fpm
+FROM php:7.3.22-fpm
 
 LABEL maintainer="i@hteen.cn"
 
+# 使用阿里云镜像
 ENV COMPOSER_MIRRORS https://mirrors.aliyun.com/composer/
+# 防止composer执行时内存溢出
+ENV COMPOSER_MEMORY_LIMIT -1
 
 # Install modules
 RUN apt-get update && apt-get install -y \
@@ -40,6 +43,14 @@ RUN curl -sS https://getcomposer.org/installer | php \
 RUN docker-php-ext-install -j$(nproc) bcmath pdo_mysql mysqli opcache zip yaf redis swoole msgpack \
     && docker-php-ext-configure yar --enable-msgpack \
     && docker-php-ext-install -j$(nproc) yar pcntl
+
+ARG PUID=1000
+ENV PUID ${PUID}
+ARG PGID=1000
+ENV PGID ${PGID}
+
+RUN groupmod -o -g ${PGID} www-data && \
+    usermod -o -u ${PUID} -g www-data www-data
 
 # 修改默认配置
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
