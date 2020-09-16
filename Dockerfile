@@ -38,8 +38,7 @@ RUN set -eux; \
     # 删除编译工具
     apk del --no-network .build-deps; \
     # 删除 php 源码
-    rm -rf /usr/src/*; \
-    rm /var/cache/apk/*;
+    rm -rf /usr/src/*;
 
 # 修改默认配置
 RUN set -eux; \

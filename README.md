@@ -44,13 +44,10 @@ composer use aliyun image
 * SPL
 * sqlite3
 * standard
-* swoole
 * tokenizer
 * xml
 * xmlreader
 * xmlwriter
-* yaf
-* yar
 * Zend OPcache
 * zip
 * zlib
