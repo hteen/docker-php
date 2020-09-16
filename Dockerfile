@@ -1,64 +1,50 @@
-FROM php:7.4.10-fpm
+FROM php:7.4.10-fpm-alpine3.12
 
 LABEL maintainer="i@hteen.cn"
 
-# 使用阿里云镜像
+# composer 使用阿里云镜像
 ENV COMPOSER_MIRRORS https://mirrors.aliyun.com/composer/
-# 防止composer执行时内存溢出
+# 防止 composer 内存溢出
 ENV COMPOSER_MEMORY_LIMIT -1
 
-# Install modules
-RUN apt-get update && apt-get install -y \
-        git \
-        ssh \
-        zip \
-        unzip \
-        libcurl4 \
-        libcurl4-openssl-dev \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libpng-dev \
-        libwebp-dev \
-        zlib1g-dev \
-        libmcrypt-dev \
-        libzip-dev \
-        libgmp-dev \
+RUN set -eux; \
+    # 阿里云源
+    # echo -e 'https://mirrors.aliyun.com/alpine/v3.12/main/' > /etc/apk/repositories; \
+    # echo -e 'https://mirrors.aliyun.com/alpine/v3.12/community/' >> /etc/apk/repositories; \
+    # apk update; \
+    apk add --no-cache \
         libmemcached-dev \
-        libmemcached11 \
-        libpcre3 \
-        libpcre3-dev \
-        --no-install-recommends && rm -r /var/lib/apt/lists/* \
-    && pecl install mcrypt-1.0.3 memcached-3.1.5 \
-    && docker-php-ext-enable mcrypt memcached \
-    && docker-php-ext-install -j$(nproc) iconv gmp \
-    && docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp\
-    && docker-php-ext-install -j$(nproc) gd
-
-RUN git clone --depth=1 https://github.com/laruence/yaf.git /usr/src/php/ext/yaf/ \
-    && git clone --depth=1 https://github.com/laruence/yar.git /usr/src/php/ext/yar/ \
-    && git clone --depth=1 https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/ \
-    && git clone --depth=1 -b v4.5.2 https://github.com/swoole/swoole-src.git /usr/src/php/ext/swoole/ \
-    && git clone --depth=1 https://github.com/msgpack/msgpack-php.git /usr/src/php/ext/msgpack/
-
-RUN curl -sS https://getcomposer.org/installer | php \
-    && mv composer.phar /usr/local/bin/composer \
-    && composer config -g repo.packagist composer ${COMPOSER_MIRRORS}
-
-RUN docker-php-ext-install -j$(nproc) bcmath pdo_mysql mysqli opcache zip yaf redis swoole msgpack \
-    && docker-php-ext-configure yar --enable-msgpack \
-    && docker-php-ext-install -j$(nproc) yar pcntl
-
-ARG PUID=1000
-ENV PUID ${PUID}
-ARG PGID=1000
-ENV PGID ${PGID}
-
-RUN groupmod -o -g ${PGID} www-data && \
-    usermod -o -u ${PUID} -g www-data www-data
+        cyrus-sasl-dev \
+        zlib-dev \
+        git \
+        gmp-dev \
+        libpng-dev \
+        freetype-dev \
+        libjpeg-turbo-dev \
+        libwebp-dev \
+        libzip-dev \
+        libmcrypt-dev; \
+    apk add --no-cache --virtual .build-deps $PHPIZE_DEPS; \
+    git clone --depth=1 https://github.com/php/pecl-encryption-mcrypt.git /usr/src/php/ext/mcrypt/; \
+    git clone --depth=1 https://github.com/php-memcached-dev/php-memcached.git /usr/src/php/ext/memcached/; \
+    git clone --depth=1 https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/; \
+    docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
+    docker-php-ext-install -j$(nproc) redis mcrypt memcached iconv gmp gd bcmath pdo_mysql mysqli opcache zip; \
+    # 安装 composer
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"; \
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer; \
+    composer config -g repo.packagist composer ${COMPOSER_MIRRORS}; \
+    rm composer-setup.php; \
+    # 删除编译工具
+    apk del --no-network .build-deps; \
+    # pecl clear-cache; \
+    # 删除 php 源码
+    rm -rf /usr/src/*; \
+    rm /var/cache/apk/*;
 
 # 修改默认配置
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 RUN set -eux; \
+    mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"; \
     { \
         echo 'post_max_size = 200M'; \
         echo 'upload_max_filesize = 200M'; \
