@@ -1,4 +1,4 @@
-FROM php:7.3.22-fpm-alpine3.12
+FROM php:7.3.23-fpm-alpine3.12
 
 LABEL maintainer="i@hteen.cn"
 
