@@ -1,4 +1,4 @@
-FROM php:7.4.11-fpm-alpine3.12
+FROM php:8.0.0-fpm-alpine3.12
 
 LABEL maintainer="i@hteen.cn"
 
@@ -48,6 +48,9 @@ RUN set -eux; \
         echo 'upload_max_filesize = 200M'; \
         echo 'max_file_uploads = 200'; \
         echo 'memory_limit = 512M'; \
+        # jit设置参考 https://www.laruence.com/2020/06/27/5963.html
+        echo 'opcache.jit=1235'; \
+        echo 'opcache.jit_buffer_size=64M'; \
     } | tee -a $PHP_INI_DIR/php.ini; \
     { \
         echo 'pm.max_children = 512'; \
