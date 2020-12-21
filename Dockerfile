@@ -1,4 +1,4 @@
-FROM php:7.3.23-fpm-alpine3.12
+FROM php:7.3.25-fpm-alpine3.12
 
 LABEL maintainer="i@hteen.cn"
 
@@ -12,7 +12,18 @@ RUN set -eux; \
     # echo -e 'https://mirrors.aliyun.com/alpine/v3.12/main/' > /etc/apk/repositories; \
     # echo -e 'https://mirrors.aliyun.com/alpine/v3.12/community/' >> /etc/apk/repositories; \
     # apk update; \
+    # 安装必备动态库
     apk add --no-cache \
+        libpng \
+        libjpeg-turbo \
+        libwebp \
+        gmp \
+        freetype \
+        libmcrypt \
+        libmemcached \
+        libzip; \
+    # 安装编译时依赖, 后续删除
+    apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         libmemcached-dev \
         cyrus-sasl-dev \
         zlib-dev \
@@ -24,12 +35,12 @@ RUN set -eux; \
         libwebp-dev \
         libzip-dev \
         libmcrypt-dev; \
-    apk add --no-cache --virtual .build-deps $PHPIZE_DEPS; \
     git clone --depth=1 https://github.com/php/pecl-encryption-mcrypt.git /usr/src/php/ext/mcrypt/; \
     git clone --depth=1 https://github.com/php-memcached-dev/php-memcached.git /usr/src/php/ext/memcached/; \
     git clone --depth=1 https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis/; \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/  --with-png-dir=/usr/include/ --with-zlib-dir; \
-    docker-php-ext-install -j$(nproc) redis mcrypt memcached iconv gmp gd bcmath pdo_mysql mysqli opcache zip; \
+    docker-php-ext-install -j$(nproc) redis mcrypt memcached iconv gmp gd bcmath pdo_mysql mysqli zip; \
+    docker-php-ext-enable opcache; \
     # 安装 composer
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"; \
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer; \
