@@ -1,6 +1,4 @@
-FROM php:7.4.13-fpm-alpine3.12
-
-LABEL maintainer="i@hteen.cn"
+FROM php:7.4.14-fpm-alpine3.12
 
 # composer 使用阿里云镜像
 ENV COMPOSER_MIRRORS https://mirrors.aliyun.com/composer/
@@ -61,9 +59,9 @@ RUN set -eux; \
         echo 'memory_limit = 512M'; \
     } | tee -a $PHP_INI_DIR/php.ini; \
     { \
-        echo 'pm.max_children = 512'; \
-        echo 'pm.start_servers = 20'; \
-        echo 'pm.min_spare_servers = 10'; \
-        echo 'pm.max_spare_servers = 40'; \
+        echo 'pm.max_children = 1024'; \
+        echo 'pm.start_servers = 64'; \
+        echo 'pm.min_spare_servers = 32'; \
+        echo 'pm.max_spare_servers = 64'; \
         echo 'pm.max_requests = 1000'; \
     } | tee -a /usr/local/etc/php-fpm.d/www.conf
