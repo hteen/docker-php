@@ -16,6 +16,7 @@ RUN set -eux; \
         libjpeg-turbo \
         libwebp \
         gmp \
+        git \
         freetype \
         libmcrypt \
         libmemcached \
