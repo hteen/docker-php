@@ -1,4 +1,4 @@
-FROM php:8.0.5-fpm-alpine3.12
+FROM php:8.0.6-fpm-alpine3.12
 
 # composer 使用阿里云镜像
 ENV COMPOSER_MIRRORS https://mirrors.aliyun.com/composer/
@@ -11,6 +11,7 @@ ENV EXTENSIONS \
     mcrypt \
     memcached \
     iconv \
+    pcntl \
     gmp \
     gd \
     bcmath \
