@@ -1,4 +1,4 @@
-FROM php:8.0.6-fpm-alpine3.12
+FROM php:8.0.8-fpm-alpine3.14
 
 # composer 使用阿里云镜像
 ENV COMPOSER_MIRRORS https://mirrors.aliyun.com/composer/
@@ -26,8 +26,8 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 
 RUN set -eux; \
     # 阿里云源
-    # echo -e 'https://mirrors.aliyun.com/alpine/v3.12/main/' > /etc/apk/repositories; \
-    # echo -e 'https://mirrors.aliyun.com/alpine/v3.12/community/' >> /etc/apk/repositories; \
+    # echo -e 'https://mirrors.aliyun.com/alpine/v3.14/main/' > /etc/apk/repositories; \
+    # echo -e 'https://mirrors.aliyun.com/alpine/v3.14/community/' >> /etc/apk/repositories; \
     # apk update; \
     apk add --no-cache git; \
     chmod +x /usr/local/bin/install-php-extensions && sync && install-php-extensions ${EXTENSIONS};\
@@ -51,7 +51,3 @@ RUN set -eux; \
     echo 'pm.max_spare_servers = 64'; \
     echo 'pm.max_requests = 1000'; \
     } | tee -a /usr/local/etc/php-fpm.d/www.conf
-
-# fix work iconv library with alpine
-RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv
-ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so
