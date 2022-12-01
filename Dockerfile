@@ -1,4 +1,4 @@
-FROM php:7.4.21-fpm-alpine3.13
+FROM php:7.4.33-fpm-alpine3.15
 
 # composer 使用阿里云镜像
 ENV COMPOSER_MIRRORS https://mirrors.aliyun.com/composer/
@@ -24,8 +24,8 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 
 RUN set -eux; \
     # 阿里云源
-    # echo -e 'https://mirrors.aliyun.com/alpine/v3.13/main/' > /etc/apk/repositories; \
-    # echo -e 'https://mirrors.aliyun.com/alpine/v3.13/community/' >> /etc/apk/repositories; \
+    # echo -e 'https://mirrors.aliyun.com/alpine/v5/main/' > /etc/apk/repositories; \
+    # echo -e 'https://mirrors.aliyun.com/alpine/v5/community/' >> /etc/apk/repositories; \
     # apk update; \
     apk add --no-cache git; \
     chmod +x /usr/local/bin/install-php-extensions && sync && install-php-extensions ${EXTENSIONS};\
