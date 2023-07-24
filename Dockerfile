@@ -1,4 +1,4 @@
-FROM php:8.1.11-fpm-alpine3.15
+FROM php:8.2-fpm-alpine3.18
 
 # composer 使用阿里云镜像
 ENV COMPOSER_MIRRORS https://mirrors.aliyun.com/composer/
