@@ -15,6 +15,7 @@ ENV EXTENSIONS \
     bcmath \
     pdo_mysql \
     mysqli \
+    imagick \
     zip \
     opcache \
     @composer
