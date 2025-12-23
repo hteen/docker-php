@@ -1,53 +1,39 @@
-# PHP docker image
+# PHP Docker Image
 
-## Installed php composer
-composer use aliyun image
-> composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
+基于官方的 PHP Docker 镜像，包含常用扩展和 Composer。
 
-## Installed extensions
+## 已安装的 PHP 扩展
 
-* bcmath
-* Core
-* ctype
-* curl
-* date
-* dom
-* fileinfo
-* filter
-* ftp
-* gd
-* gmp
-* hash
-* iconv
-* json
-* libxml
-* mbstring
-* mcrypt
-* memcached
-* msgpack
-* mysqli
-* mysqlnd
-* openssl
-* pcntl
-* pcre
-* PDO
-* pdo_mysql
-* pdo_sqlite
-* Phar
-* posix
-* readline
-* redis
-* Reflection
-* session
-* SimpleXML
-* sodium
-* SPL
-* sqlite3
-* standard
-* tokenizer
-* xml
-* xmlreader
-* xmlwriter
-* Zend OPcache
-* zip
-* zlib
+主要扩展（通过 `install-php-extensions` 安装）：
+- redis
+- memcached
+- pcntl
+- gmp
+- gd
+- bcmath
+- pdo_mysql
+- mysqli
+- zip
+- opcache
+
+## Composer
+
+镜像已包含 Composer 2
+
+## PHP 配置
+
+- `post_max_size`: 200M
+- `upload_max_filesize`: 200M
+- `max_file_uploads`: 200
+- `memory_limit`: 512M
+- `opcache.enable`: 1
+- `opcache.jit`: 1235
+- `opcache.jit_buffer_size`: 64M
+
+## PHP-FPM 配置
+
+- `pm.max_children`: 256
+- `pm.start_servers`: 16
+- `pm.min_spare_servers`: 8
+- `pm.max_spare_servers`: 16
+- `pm.max_requests`: 1000
