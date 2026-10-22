@@ -18,9 +18,9 @@
 
 ## 已安装的 PHP 扩展
 
-通过 `install-php-extensions` 安装。PECL 扩展钉死版本或从 GitHub tag 拉取，避免走 REST `latest`：
+通过 `install-php-extensions` 安装。mcrypt / memcached / imagick 从 GitHub tag 拉取；redis 走 PECL 完整 tgz（含 liblzf，不查 REST）：
 
-- redis 6.2.0（PECL 完整包，GitHub 源缺少 liblzf 子模块）
+- redis 6.2.0
 - mcrypt 1.0.7（`php/pecl-encryption-mcrypt`）
 - memcached 3.3.0（`php-memcached-dev/php-memcached`）
 - imagick 3.8.0
