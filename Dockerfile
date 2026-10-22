@@ -43,6 +43,7 @@ RUN set -eux; \
     make clean; \
     rm -f /usr/src/php/.docker-extracted /usr/src/php-CVE-2026-109618-109619.patch; \
     tar -C /usr/src -cJf /usr/src/php.tar.xz php; \
+    cd /; \
     docker-php-source delete; \
     apt-mark auto '.*' > /dev/null; \
     [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
@@ -64,8 +65,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
     COMPOSER_CURL_DISABLE_HTTP2=1 \
     COMPOSER_MEMORY_LIMIT=-1
 
-# 官方用法：name-version 走 PECL 完整包；owner/repo@tag 走 GitHub，避开 REST latest
-ENV EXTENSIONS="phpredis/phpredis@6.2.0 php/pecl-encryption-mcrypt@1.0.7 php-memcached-dev/php-memcached@v3.3.0 Imagick/imagick@3.8.0 pcntl gmp gd bcmath pdo_mysql mysqli zip opcache @composer"
+# name-version 走 PECL 完整包；owner/repo@tag 走 GitHub，避开 REST latest。
+# redis 必须用 PECL：GitHub tarball 不含 liblzf 子模块。
+ENV EXTENSIONS="redis-6.2.0 php/pecl-encryption-mcrypt@1.0.7 php-memcached-dev/php-memcached@v3.3.0 Imagick/imagick@3.8.0 pcntl gmp gd bcmath pdo_mysql mysqli zip opcache @composer"
 
 ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
