@@ -66,10 +66,12 @@ ENV DEBIAN_FRONTEND=noninteractive \
     COMPOSER_MEMORY_LIMIT=-1
 
 # owner/repo@tag 走 GitHub，避开 PECL REST latest。
-# redis 用 PECL 完整 tgz：带 liblzf，且不走 REST（REST 在 arm64 上会报 No releases available）。
-ENV EXTENSIONS="https://pecl.php.net/get/redis-6.2.0.tgz php/pecl-encryption-mcrypt@1.0.7 php-memcached-dev/php-memcached@v3.3.0 Imagick/imagick@3.8.0 pcntl gmp gd bcmath pdo_mysql mysqli zip opcache @composer"
-
+# redis PECL tgz 的 package.xml 在包根，源码和 liblzf 在 redis-6.2.0/。
+# 交给 URL 安装会在根目录找 liblzf/LICENSE，必然失败。
+ADD https://pecl.php.net/get/redis-6.2.0.tgz /tmp/redis-6.2.0.tgz
 ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+ENV EXTENSIONS="php/pecl-encryption-mcrypt@1.0.7 php-memcached-dev/php-memcached@v3.3.0 Imagick/imagick@3.8.0 pcntl gmp gd bcmath pdo_mysql mysqli zip opcache @composer"
 
 WORKDIR /app
 
@@ -77,7 +79,10 @@ RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends git; \
     rm -rf /var/lib/apt/lists/*; \
-    install-php-extensions ${EXTENSIONS}; \
+    tar -xzf /tmp/redis-6.2.0.tgz -C /tmp; \
+    cp /tmp/package.xml /tmp/redis-6.2.0/package.xml; \
+    install-php-extensions /tmp/redis-6.2.0 ${EXTENSIONS}; \
+    rm -rf /tmp/redis-6.2.0 /tmp/package.xml /tmp/redis-6.2.0.tgz; \
     mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"; \
     { \
       echo 'post_max_size = 64M'; \
