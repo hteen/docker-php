@@ -85,23 +85,9 @@ RUN set -eux; \
     rm -rf /tmp/redis-6.2.0 /tmp/package.xml /tmp/redis-6.2.0.tgz; \
     mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"; \
     { \
-      echo 'post_max_size = 64M'; \
-      echo 'upload_max_filesize = 64M'; \
-      echo 'max_file_uploads = 20'; \
-      echo 'memory_limit = 256M'; \
-      echo 'opcache.enable=1'; \
-      echo 'opcache.memory_consumption=64'; \
-      echo 'opcache.interned_strings_buffer=8'; \
-      echo 'opcache.jit=1235'; \
-      echo 'opcache.jit_buffer_size=16M'; \
       echo 'session.upload_progress.enabled=0'; \
-    } > "$PHP_INI_DIR/conf.d/99-custom.ini"; \
+    } > "$PHP_INI_DIR/conf.d/zz-compat.ini"; \
     { \
-      echo 'pm = dynamic'; \
-      echo 'pm.max_children = 8'; \
-      echo 'pm.start_servers = 2'; \
-      echo 'pm.min_spare_servers = 1'; \
-      echo 'pm.max_spare_servers = 3'; \
-      echo 'pm.max_requests = 500'; \
+      echo '[www]'; \
       echo 'php_admin_flag[session.upload_progress.enabled] = off'; \
-    } >> /usr/local/etc/php-fpm.d/www.conf
+    } > /usr/local/etc/php-fpm.d/zz-compat.conf

@@ -37,26 +37,13 @@
 
 由 `install-php-extensions @composer` 安装
 
-## PHP 配置
+## PHP / PHP-FPM 配置
 
-面向 2 核 4GB、同机跑 MySQL / Redis / Caddy 的机器：
+镜像只保留构建兼容项（关闭 `session.upload_progress`），其余沿用官方默认。业务配置用 `-v` 挂进去即可，后加载的 `zz-*.ini` / `zz-*.conf` 会覆盖默认值：
 
-- `post_max_size`: 64M
-- `upload_max_filesize`: 64M
-- `max_file_uploads`: 20
-- `memory_limit`: 256M
-- `opcache.enable`: 1
-- `opcache.memory_consumption`: 64
-- `opcache.interned_strings_buffer`: 8
-- `opcache.jit`: 1235
-- `opcache.jit_buffer_size`: 16M
-- `session.upload_progress.enabled`: 0
-
-## PHP-FPM 配置
-
-- `pm`: dynamic
-- `pm.max_children`: 8
-- `pm.start_servers`: 2
-- `pm.min_spare_servers`: 1
-- `pm.max_spare_servers`: 3
-- `pm.max_requests`: 500
+```bash
+docker run --rm \
+  -v "$PWD/zz-app.ini:/usr/local/etc/php/conf.d/zz-app.ini:ro" \
+  -v "$PWD/zz-app.conf:/usr/local/etc/php-fpm.d/zz-app.conf:ro" \
+  ghcr.io/hteen/php:8.1
+```
