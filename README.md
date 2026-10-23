@@ -25,21 +25,13 @@
 
 由官方 `composer:2` 镜像复制（避开本机访问 `composer.github.io` 不稳定）
 
-## PHP 配置
+## PHP / PHP-FPM 配置
 
-- `post_max_size`: 200M
-- `upload_max_filesize`: 200M
-- `max_file_uploads`: 200
-- `memory_limit`: 384M
-- `opcache.enable`: 1
-- `opcache.jit`: 0
-- `opcache.jit_buffer_size`: 0
-- `session.upload_progress.enabled`: 0
+镜像只保留构建兼容项（关闭 JIT、关闭 `session.upload_progress`），其余沿用官方默认。业务配置用 `-v` 挂进去即可，后加载的 `zz-*.ini` / `zz-*.conf` 会覆盖默认值：
 
-## PHP-FPM 配置
-
-- `pm.max_children`: 6
-- `pm.start_servers`: 2
-- `pm.min_spare_servers`: 1
-- `pm.max_spare_servers`: 3
-- `pm.max_requests`: 300
+```bash
+docker run --rm \
+  -v "$PWD/zz-app.ini:/usr/local/etc/php/conf.d/zz-app.ini:ro" \
+  -v "$PWD/zz-app.conf:/usr/local/etc/php-fpm.d/zz-app.conf:ro" \
+  ghcr.io/hteen/php:8.4
+```
